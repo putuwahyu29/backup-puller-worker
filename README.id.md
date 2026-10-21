@@ -10,11 +10,11 @@ Microservice dan engine worker perantara universal untuk mengambil berkas backup
 
 ---
 
-## ðŸŒŸ Fitur Utama
+## 🌟 Fitur Utama
 
 - **Dukungan Multi-Destination Storage**:
-  - ðŸ¢ **QNAP File Station CGI**: Login session SID otomatis (Base64), multipart streaming upload, auto-refresh session saat kedaluwarsa, mendukung firmware QTS & QuTS hero.
-  - â˜ï¸ **WebDAV / Nextcloud**: Mendukung Basic Auth & Bearer token, auto-create subfolder bertingkat (`MKCOL`), dan streaming upload binary (`PUT`). Cocok untuk Nextcloud, ownCloud, atau server WebDAV lainnya.
+  - 🏢 **QNAP File Station CGI**: Login session SID otomatis (Base64), multipart streaming upload, auto-refresh session saat kedaluwarsa, mendukung firmware QTS & QuTS hero.
+  - ☁️ **WebDAV / Nextcloud**: Mendukung Basic Auth & Bearer token, auto-create subfolder bertingkat (`MKCOL`), dan streaming upload binary (`PUT`). Cocok untuk Nextcloud, ownCloud, atau server WebDAV lainnya.
 - **Single-App & Multi-App Fleet Mode**:
   - *Single-App Mode*: Konfigurasi via file `.env` untuk mem-backup 1 aplikasi.
   - *Multi-App Fleet Mode*: Cukup definisikan daftar aplikasi di `config/apps.json`, 1 worker container dapat mem-backup 5, 10, atau puluhan aplikasi sekaligus ke tujuan storage yang berbeda-beda!
@@ -28,11 +28,11 @@ Microservice dan engine worker perantara universal untuk mengambil berkas backup
   - `force`: Selalu upload ulang.
 - **Audit Feedback Loop**:
   - Melaporkan status sukses maupun gagal (beserta error detail dan tipe storage) ke endpoint `POST /api/service-reports` pada aplikasi asal.
-- **Container Ready**: Dockerfile & Docker Compose siap deploy di server produksi maupun lokal.
+- **Container Ready & GHCR**: Multi-architecture Docker image (`linux/amd64`, `linux/arm64`) otomatis dirilis via GitHub Container Registry.
 
 ---
 
-## âš™ï¸ Pilihan Driver Storage Tujuan
+## ⚙️ Pilihan Driver Storage Tujuan
 
 Anda dapat menentukan tujuan penyimpanan baik secara global di `.env` atau per aplikasi di `apps.json`:
 
@@ -59,13 +59,11 @@ WEBDAV_AUTH_TYPE=basic
 
 ---
 
-## ðŸš€ Panduan Penggunaan
+## 🚀 Panduan Penggunaan
 
 ### 1. Mode Standalone / Local Development
 
 ```bash
-cd packages/backup-puller-worker
-
 # Install dependencies
 npm install
 
@@ -118,10 +116,37 @@ Anda dapat mencampur tujuan storage antar aplikasi! Misalnya: App A ke QNAP, App
    ```
 3. Jalankan `npm start`. Worker akan melakukan loop untuk mem-backup setiap aplikasi yang terdaftar ke tujuan storage masing-masing.
 
-### 3. Deploy Menggunakan Docker Compose
+---
 
+## 🐳 Rilis Otomatis & Distribusi Docker Image (GHCR)
+
+Repository ini telah dilengkapi dengan workflow CI/CD GitHub Actions ([.github/workflows/docker-publish.yml](.github/workflows/docker-publish.yml)). Setiap kali Anda melakukan push ke branch `main` atau membuat release tag (contoh: `v1.0.0`), Docker image akan otomatis di-build (multi-arch: `linux/amd64`, `linux/arm64`) dan di-publish ke **GitHub Container Registry (GHCR)**.
+
+### 1. Menarik Image Langsung dari GitHub
 ```bash
-docker compose up -d --build
+docker pull ghcr.io/putuwahyu29/backup-puller-worker:latest
+```
+
+### 2. Deploy di Server Produksi Menggunakan Docker Compose
+Pada server target, Anda tidak perlu meng-clone source code. Cukup buat file `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+
+services:
+  backup-worker:
+    image: ghcr.io/putuwahyu29/backup-puller-worker:latest
+    container_name: backup-worker
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./runtime:/app/runtime
+      - ./config/apps.json:/app/config/apps.json:ro
+```
+
+Lalu jalankan:
+```bash
+docker compose up -d
 ```
 
 Melihat log:
@@ -131,38 +156,7 @@ docker compose logs -f
 
 ---
 
-## ðŸ³ Panduan Rilis Docker Image
+## 📄 Lisensi
 
-Untuk mendistribusikan worker ini agar dapat dijalankan di server deployment manapun tanpa perlu build manual:
-
-1. **Build dan Tag Docker Image**:
-   ```bash
-   docker build -t putuwahyu29/backup-puller-worker:v1.0.0 .
-   ```
-
-2. **Push ke Container Registry**:
-   ```bash
-   docker push putuwahyu29/backup-puller-worker:v1.0.0
-   ```
-
-3. **Deploy di Server Produksi**:
-   Pada server target, cukup buat file `docker-compose.yml` sederhana:
-   ```yaml
-   version: '3.8'
-   services:
-     backup-worker:
-       image: putuwahyu29/backup-puller-worker:v1.0.0
-       restart: unless-stopped
-       env_file: .env
-       volumes:
-         - ./runtime:/app/runtime
-         - ./apps.json:/app/config/apps.json:ro
-   ```
-   Lalu jalankan `docker compose up -d`.
-
----
-
-## ðŸ“„ Lisensi
-
-Paket ini dirilis di bawah lisensi terbuka [MIT License](LICENSE).
+Paket ini dirilis di bawah lisensi terbuka [MIT License](LICENSE).  
 Dikembangkan oleh **Putu Wahyu & Kontributor**.
