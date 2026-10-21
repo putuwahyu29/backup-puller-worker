@@ -1,0 +1,25 @@
+[
+  {
+    "name": "app-one",
+    "serviceName": "backup-puller-app-one",
+    "apiBaseUrl": "https://app-one.example.com",
+    "apiKey": "bk_example_secret_key_app_one",
+    "backupTypes": ["database"],
+    "storage": "qnap",
+    "qnapDestPath": "/home/backup/app-one",
+    "uploadPolicy": "dedupe"
+  },
+  {
+    "name": "app-two",
+    "serviceName": "backup-puller-app-two",
+    "apiBaseUrl": "https://app-two.example.com",
+    "apiKey": "bk_example_secret_key_app_two",
+    "backupTypes": ["database", "attachments"],
+    "storage": "webdav",
+    "webdavUrl": "https://cloud.example.com/remote.php/dav/files/admin",
+    "webdavUsername": "admin",
+    "webdavPassword": "example-webdav-app-password",
+    "webdavDestPath": "/backup/app-two",
+    "uploadPolicy": "daily"
+  }
+]

@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  backup-worker:
+    build: .
+    container_name: bps-backup-worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./runtime:/app/runtime
+      - ./config:/app/config:ro

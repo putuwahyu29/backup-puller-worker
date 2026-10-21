@@ -1,0 +1,43 @@
+{
+  "name": "@putuwahyu29/backup-puller-worker",
+  "version": "1.0.0",
+  "description": "Universal, reusable backup puller, QNAP, and WebDAV uploader microservice for Laravel applications",
+  "homepage": "https://github.com/putuwahyu29/backup-puller-worker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/putuwahyu29/backup-puller-worker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/putuwahyu29/backup-puller-worker/issues"
+  },
+  "main": "src/index.js",
+  "bin": {
+    "backup-puller": "./bin/backup-puller.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "once": "node src/index.js --once",
+    "dev": "node --watch src/index.js",
+    "test": "node --test tests/**/*.test.js"
+  },
+  "keywords": [
+    "backup",
+    "qnap",
+    "webdav",
+    "nextcloud",
+    "nas",
+    "laravel",
+    "archiver",
+    "automation",
+    "docker"
+  ],
+  "author": "Putu Wahyu (https://github.com/putuwahyu29)",
+  "license": "MIT",
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "fast-xml-parser": "^4.4.0",
+    "form-data": "^4.0.0"
+  }
+}

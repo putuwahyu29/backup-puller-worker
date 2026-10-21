@@ -1,0 +1,25 @@
+[
+  {
+    "name": "kadiri",
+    "serviceName": "backup-puller-kadiri",
+    "apiBaseUrl": "http://127.0.0.1:8000",
+    "apiKey": "replace-with-kadiri-api-key",
+    "backupTypes": ["database"],
+    "storage": "qnap",
+    "qnapDestPath": "/home/backup/kadiri",
+    "uploadPolicy": "dedupe"
+  },
+  {
+    "name": "panjalu",
+    "serviceName": "backup-puller-panjalu",
+    "apiBaseUrl": "http://127.0.0.1:8001",
+    "apiKey": "replace-with-panjalu-api-key",
+    "backupTypes": ["database", "attachments"],
+    "storage": "webdav",
+    "webdavUrl": "https://cloud.example.com/remote.php/dav/files/admin",
+    "webdavUsername": "admin",
+    "webdavPassword": "replace-with-webdav-token",
+    "webdavDestPath": "/backup/panjalu",
+    "uploadPolicy": "daily"
+  }
+]
